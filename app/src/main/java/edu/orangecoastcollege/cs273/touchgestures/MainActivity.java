@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
         longPressTextView = (TextView) findViewById(R.id.longPressTextView);
         gesturesLogTextView = (TextView) findViewById(R.id.gesturesLogTextView);
         flingTextView = (TextView) findViewById(R.id.flingTextView);
+        scrollTextView = (TextView) findViewById(R.id.scrollTextView);
 
         mGestureDetector = new GestureDetector(gesturesScrollView.getContext(), this);
     }
@@ -59,54 +60,105 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
      */
     @Override
     public boolean onSingleTapConfirmed(MotionEvent motionEvent) {
-        gesturesLogTextView.append("\nonSingleTap gesture occurred");
+        gesturesLogTextView.append("\nonSingleTapConfirmed");
         singleTapTextView.setText(String.valueOf(++singleTaps));
         return true;
     }
 
     /**
-     *
-     * @param motionEvent
-     * @return
+     * Responds to a double-tap gesture. Double-tap is the succession of two single tap gestures
+     * within a duration
+     * @param motionEvent The motion event triggering the gesture
+     * @return True if the event was handled, false otherwise
      */
     @Override
     public boolean onDoubleTap(MotionEvent motionEvent) {
-        return false;
+        gesturesLogTextView.append("\nonDoubleTapUp touch event");
+        doubleTapTextView.setText(String.valueOf(++doubleTaps));
+        return true;
     }
 
+    /**
+     * During a double-tap, another event occurs
+     * @param motionEvent The motion event triggering the gesture
+     * @return True if the event was handled, false otherwise
+     */
     @Override
     public boolean onDoubleTapEvent(MotionEvent motionEvent) {
-        return false;
+        return true;
     }
 
+    /**
+     * User made initial contact with device.
+     * Every gesture begins with this method.
+     * @param motionEvent The motion event triggering the gesture
+     * @return True if the event was handled, false otherwise
+     */
     @Override
     public boolean onDown(MotionEvent motionEvent) {
-        return false;
+        gesturesLogTextView.append("\nonDown touch event");
+        return true;
     }
 
+    /**
+     * Down event where user does not let go, short duration of time.
+     * @param motionEvent The motion event triggering the gesture
+     */
     @Override
     public void onShowPress(MotionEvent motionEvent) {
-
+        gesturesLogTextView.append("\nonShowPress touch event");
     }
 
+    /**
+     * Similar to onSingleTapConfirmed, but it could be part of a double-tap.
+     * @param motionEvent The motion event triggering the gesture
+     * @return True if the event was handled, false otherwise
+     */
     @Override
     public boolean onSingleTapUp(MotionEvent motionEvent) {
-        return false;
+        gesturesLogTextView.append("\nonSingleTapUp touch event");
+        return true;
     }
 
+    /**
+     * Down event, followed by a press and lateral movement,
+     * without relinquishing contact with device.
+     * @param motionEvent The event where scroll started.
+     * @param motionEvent1 The event where the scroll stopped.
+     * @param distanceX The distance in X direction (pixels).
+     * @param distanceY The distance in Y direction (pixels).
+     * @return True if the event was handled, false otherwise
+     */
     @Override
-    public boolean onScroll(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
-        return false;
+    public boolean onScroll(MotionEvent motionEvent, MotionEvent motionEvent1, float distanceX, float distanceY) {
+        gesturesLogTextView.append("\nonScroll: distanceX is " + distanceX + ", distanceY is " + distanceY);
+        scrollTextView.setText(String.valueOf(++scrolls));
+        return true;
     }
 
+    /**
+     * Down event, followed by a long hold.
+     * @param motionEvent The motion event triggering the gesture
+     */
     @Override
     public void onLongPress(MotionEvent motionEvent) {
-
+        gesturesLogTextView.append("\nonLongPress touch event");
+        longPressTextView.setText(String.valueOf(++longPresses));
     }
 
+    /**
+     * Similar to scroll, with faster velocity and user releases contact with device
+     * @param motionEvent The event where fling started.
+     * @param motionEvent1 The event where the fling stopped.
+     * @param v Initial velocity (pixels/second)
+     * @param v1 Terminal velocity (pixels/second)
+     * @return True if the event was handled, false otherwise
+     */
     @Override
     public boolean onFling(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
-        return false;
+        gesturesLogTextView.append("\nonFling: velocityX is " + v + ", velocityY is " + v1);
+        flingTextView.setText(String.valueOf(++flings));
+        return true;
     }
 
     public void clearAll(View view) {
