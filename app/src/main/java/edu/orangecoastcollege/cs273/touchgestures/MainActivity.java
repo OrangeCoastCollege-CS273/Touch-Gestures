@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
+import android.view.View;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -39,11 +40,35 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
         mGestureDetector = new GestureDetector(gesturesScrollView.getContext(), this);
     }
 
+    /**
+     * Sends the touch event to all the children in ViewGroup:
+     * e.g. ScrollView down to the TextView
+     * @param ev
+     * @return
+     */
     @Override
-    public boolean onSingleTapConfirmed(MotionEvent motionEvent) {
-        return false;
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        super.dispatchTouchEvent(ev);
+        return mGestureDetector.onTouchEvent(ev);
     }
 
+    /**
+     * Handles a single-tap gesture. No part of double-tap
+     * @param motionEvent The motion event triggering the gesture
+     * @return True if the event was handled, false otherwise
+     */
+    @Override
+    public boolean onSingleTapConfirmed(MotionEvent motionEvent) {
+        gesturesLogTextView.append("\nonSingleTap gesture occurred");
+        singleTapTextView.setText(String.valueOf(++singleTaps));
+        return true;
+    }
+
+    /**
+     *
+     * @param motionEvent
+     * @return
+     */
     @Override
     public boolean onDoubleTap(MotionEvent motionEvent) {
         return false;
@@ -82,5 +107,20 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
     @Override
     public boolean onFling(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
         return false;
+    }
+
+    public void clearAll(View view) {
+        gesturesLogTextView.setText("");
+        singleTapTextView.setText(getString(R.string.zero));
+        doubleTapTextView.setText(getString(R.string.zero));
+        longPressTextView.setText(getString(R.string.zero));
+        scrollTextView.setText(getString(R.string.zero));
+        flingTextView.setText(getString(R.string.zero));
+
+        singleTaps = 0;
+        doubleTaps = 0;
+        longPresses = 0;
+        scrolls = 0;
+        flings  = 0;
     }
 }
