@@ -23,6 +23,11 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
 
     private int singleTaps = 0, doubleTaps = 0, longPresses = 0, scrolls = 0, flings = 0;
 
+    /**
+     * Called on activity start.  Connects the views to UI
+     * Instantiates the {@link GestureDetector}
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -161,6 +166,10 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
         return true;
     }
 
+    /**
+     * Resets all {@link TextView}s and counters
+     * @param view Button used to call method
+     */
     public void clearAll(View view) {
         gesturesLogTextView.setText("");
         singleTapTextView.setText(getString(R.string.zero));
